@@ -11,7 +11,7 @@ def parse_sim_log(path, backend):
             if line == ' \n':
                 continue
             str_val = line.split(',')[0]
-            value = float(re.sub("[^\d.]", "", str_val))
+            value = float(re.sub("[^\d.-]", "", str_val))
             vector.append(value)
         return vector
     elif backend == 'Vivado':
@@ -38,6 +38,42 @@ class SimValuesTest(unittest.TestCase):
         self.va_csim = np.array(parse_sim_log('VA/VA-csim.log', 'VivadoAccelerator'))
         self.va_hw = np.load('VA/VA-HW.npy').ravel()
 
+        self.v_pr_dummy_csim = np.array(parse_sim_log('V@PR-dummy/V@PR-dummy-csim.log', 'Vivado'))
+        self.v_pr_dummy_cosim = np.array(parse_sim_log('V@PR-dummy/V@PR-dummy-cosim.log', 'Vivado'))
+
+        self.va_dummy_csim = np.array(parse_sim_log('VA-dummy/VA-dummy-csim.log', 'VivadoAccelerator'))
+        self.va_dummy_cosim = np.array(parse_sim_log('VA-dummy/VA-dummy-cosim.log', 'VivadoAccelerator'))
+
+    # Dummy model tests
+    # --- 1st row ---
+
+    def test_va_dummy_csim_VS_va_dummy_cosim(self):
+        print('va_dummy_csim vs va_dummy_cosim')
+        np.testing.assert_array_equal(x=self.va_dummy_csim, y=self.va_dummy_cosim)
+
+    def test_va_dummy_csim_VS_v_pr_dummy_csim(self):
+        print('va_dummy_csim vs v_pr_dummy_csim')
+        np.testing.assert_array_equal(x=self.va_dummy_csim, y=self.v_pr_dummy_csim)
+
+    def test_va_dummy_csim_VS_v_pr_dummy_cosim(self):
+        print('va_dummy_csim vs v_pr_dummy_cosim')
+        np.testing.assert_array_equal(x=self.va_dummy_csim, y=self.v_pr_dummy_cosim)
+
+    # --- 2nd row ---
+    def test_va_dummy_cosim_VS_v_pr_dummy_csim(self):
+        print('va_dummy_cosim vs v_pr_dummy_csim')
+        np.testing.assert_array_equal(x=self.va_dummy_cosim, y=self.v_pr_dummy_csim)
+
+    def test_va_dummy_cosim_VS_v_pr_dummy_cosim(self):
+        print('va_dummy_cosim vs v_pr_dummy_cosim')
+        np.testing.assert_array_equal(x=self.va_dummy_cosim, y=self.v_pr_dummy_cosim)
+
+    # --- 3rd row ---
+    def test_v_pr_dummy_csim_VS_v_pr_dummy_cosim(self):
+        print('v_pr_dummy_csim vs v_pr_dummy_cosim')
+        np.testing.assert_array_equal(x=self.v_pr_dummy_csim, y=self.v_pr_dummy_cosim)
+
+    # Big model tests
     # --- 1st row ---
 
     def test_va_csim_VS_va_cosim(self):
