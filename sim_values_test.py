@@ -44,6 +44,15 @@ class SimValuesTest(unittest.TestCase):
         self.va_dummy_csim = np.array(parse_sim_log('VA-dummy/VA-dummy-csim.log', 'VivadoAccelerator'))
         self.va_dummy_cosim = np.array(parse_sim_log('VA-dummy/VA-dummy-cosim.log', 'VivadoAccelerator'))
 
+        self.v_378_csim = np.array(parse_sim_log('V@378/V@378-csim.log', 'Vivado'))
+        self.v_378_cosim = np.array(parse_sim_log('V@378/V@378-cosim.log', 'Vivado'))
+
+    # PR378 test model. All layers before flatten (excluded)
+    def test_v_378_csim_VS_v_378_cosim(self):
+        print('v_378_csim vs v_378_cosim')
+        np.testing.assert_array_equal(x=self.v_378_csim, y=self.v_378_cosim)
+
+
     # Dummy model tests
     # --- 1st row ---
 
